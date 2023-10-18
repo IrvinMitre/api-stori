@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from "dotenv";
+import logger from "morgan";
 
 
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
@@ -12,6 +13,7 @@ class App {
     this.routes();
   }
   private middleware() {
+    this.express.use(logger("dev"));
     this.express.use(express.json());
   }
 
