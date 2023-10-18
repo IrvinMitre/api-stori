@@ -1,15 +1,29 @@
 import express from 'express';
+import dotenv from "dotenv";
 
-const app = express();
 
-app.use(express.json());
+dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
-const PORT = 3000;
+class App {
+  public express: express.Application;
 
-app.get('/', (_req, res) => {
-  res.send('Hello, Stori!!');
-});
+  constructor() {
+    this.express = express(); this.middleware();
+    this.routes();
+  }
+  private middleware() {
+    this.express.use(express.json());
+  }
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
-});
+  private routes() {
+    const router: express.Router = express.Router();
+    router.get("/", (_req: express.Request, res: express.Response) => {
+      res.json({
+        message: "Hello Stori team!",
+      });
+    });
+    this.express.use("/", router);
+  }
+}
+
+export default new App().express;
